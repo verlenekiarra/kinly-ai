@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SilverCare Concierge</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --text: #1a202c;
+    --muted: #718096;
+    --accent-elder: #6b46c1;
+    --accent-caregiver: #2b6cb0;
+    --accent-elder-light: #e9d8fd;
+    --accent-caregiver-light: #bee3f8;
+    --danger: #c53030;
+    --warning: #dd6b20;
+    --success: #276749;
+    --bubble-user: #6b46c1;
+    --bubble-bot: #f0f4f8;
+    --font: -apple-system, "Segoe UI", system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .logo {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #6b46c1, #2b6cb0);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 16px;
+  }
+  .header-info { flex: 1; }
+  .header-title { font-size: 16px; font-weight: 700; }
+  .header-sub { font-size: 12px; color: var(--muted); }
+  .mode-toggle {
+    display: flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .mode-btn {
+    padding: 5px 14px;
+    border-radius: 18px;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .mode-btn.active-elder { background: var(--accent-elder); color: white; }
+  .mode-btn.active-caregiver { background: var(--accent-caregiver); color: white; }
+
+  /* ── Main layout ── */
+  .main { display: flex; flex: 1; overflow: hidden; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+  .sidebar-section { padding: 16px; }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .tool-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tool-card:hover { border-color: var(--accent-elder); background: var(--accent-elder-light); }
+  .tool-card.caregiver:hover { border-color: var(--accent-caregiver); background: var(--accent-caregiver-light); }
+  .tool-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .tool-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  .dot-green { background: #38a169; }
+  .dot-gray { background: var(--muted); }
+  .status-row { font-size: 11px; color: var(--muted); display: flex; align-items: center; margin-bottom: 4px; }
+
+  /* ── Chat area ── */
+  .chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .msg-row { display: flex; gap: 10px; align-items: flex-end; }
+  .msg-row.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+    background: var(--bg); border: 1px solid var(--border);
+  }
+  .avatar.bot-elder { background: var(--accent-elder-light); }
+  .avatar.bot-caregiver { background: var(--accent-caregiver-light); }
+
+  .bubble {
+    max-width: 68%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .bubble.user {
+    background: var(--bubble-user);
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble.user.caregiver { background: var(--accent-caregiver); }
+  .bubble.bot {
+    background: var(--bubble-bot);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+  }
+
+  .bubble-meta { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: right; }
+  .bubble-meta.bot-meta { text-align: left; }
+
+  /* Tool call indicator */
+  .tool-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ebf4ff;
+    border: 1px solid #bee3f8;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--accent-caregiver);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .tool-indicator.elder { background: var(--accent-elder-light); border-color: #b794f4; color: var(--accent-elder); }
+  .spinner {
+    width: 10px; height: 10px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Urgency badge */
+  .urgency-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600;
+  }
+  .urgency-1, .urgency-2 { background: #f0fff4; color: var(--success); border: 1px solid #9ae6b4; }
+  .urgency-3 { background: #fffbeb; color: var(--warning); border: 1px solid #fbd38d; }
+  .urgency-4, .urgency-5 { background: #fff5f5; color: var(--danger); border: 1px solid #fc8181; }
+
+  /* Quick replies */
+  .quick-replies {
+    padding: 0 20px 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .qr-btn {
+    padding: 7px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .qr-btn:hover { border-color: var(--accent-elder); color: var(--accent-elder); }
+  .qr-btn.caregiver:hover { border-color: var(--accent-caregiver); color: var(--accent-caregiver); }
+
+  /* Input bar */
+  .input-bar {
+    padding: 12px 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .input-wrap { flex: 1; position: relative; }
+  textarea {
+    width: 100%;
+    resize: none;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.5;
+    outline: none;
+    max-height: 100px;
+    overflow-y: auto;
+    background: var(--bg);
+    transition: border-color 0.15s;
+  }
+  textarea:focus { border-color: var(--accent-elder); background: var(--surface); }
+  textarea.caregiver-mode:focus { border-color: var(--accent-caregiver); }
+  .send-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent-elder);
+    color: white;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    font-size: 16px;
+  }
+  .send-btn:hover { opacity: 0.85; }
+  .send-btn.caregiver { background: var(--accent-caregiver); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Typing indicator */
+  .typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; }
+  .typing span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--muted);
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* Empty state */
+  .empty-state {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px; text-align: center; color: var(--muted);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .empty-sub { font-size: 14px; line-height: 1.6; max-width: 320px; }
+
+  /* Disclaimer banner */
+  .disclaimer {
+    background: #fffbeb;
+    border-top: 1px solid #fbd38d;
+    padding: 6px 16px;
+    font-size: 11px;
+    color: #92400e;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .sidebar { display: none; }
+    .mode-toggle { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">SC</div>
+  <div class="header-info">
+    <div class="header-title">SilverCare Concierge</div>
+    <div class="header-sub">Powered by IBM Bob + Langflow MCP</div>
+  </div>
+  <div class="mode-toggle">
+    <button class="mode-btn active-elder" id="btn-elder" onclick="setMode('elder')">👴 Lansia</button>
+    <button class="mode-btn" id="btn-caregiver" onclick="setMode('caregiver')">👔 Karyawan</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">MCP Tools</div>
+
+      <div class="tool-card" id="tc-med" onclick="insertQuick('Obat apa yang harus saya minum sekarang?')">
+        <div class="tool-name">💊 Jadwal Obat</div>
+        <div class="tool-desc">Cek jadwal minum obat berdasarkan resep dokter</div>
+      </div>
+
+      <div class="tool-card" id="tc-inter" onclick="insertQuick('Apakah Amlodipine dan Metformin aman diminum bersamaan?')">
+        <div class="tool-name">⚠️ Interaksi Obat</div>
+        <div class="tool-desc">Periksa keamanan kombinasi obat</div>
+      </div>
+
+      <div class="tool-card" id="tc-sym" onclick="insertQuick('Saya merasa pusing dan mual setelah minum obat tadi pagi')">
+        <div class="tool-name">🩺 Lapor Gejala</div>
+        <div class="tool-desc">Analisis gejala & penilaian urgensi</div>
+      </div>
+
+      <div class="tool-card caregiver" id="tc-leave" onclick="insertQuick('Saya ingin mengajukan caregiver leave untuk merawat ibu saya')">
+        <div class="tool-name">📋 Caregiver Leave</div>
+        <div class="tool-desc">Draft surat pengajuan cuti HR otomatis</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section" style="border-top: 1px solid var(--border);">
+      <div class="sidebar-label">Status Koneksi</div>
+      <div class="status-row"><span class="status-dot dot-green"></span>IBM Bob</div>
+      <div class="status-row" id="langflow-status"><span class="status-dot dot-gray"></span>Langflow MCP</div>
+      <div class="status-row" id="astradb-status"><span class="status-dot dot-gray"></span>Astra DB</div>
+    </div>
+
+    <div class="sidebar-section" style="border-top: 1px solid var(--border); margin-top: auto;">
+      <div class="sidebar-label">Profil Aktif</div>
+      <div style="font-size: 13px; font-weight: 600;" id="profile-name">Bu Siti Rahayu</div>
+      <div style="font-size: 11px; color: var(--muted);" id="profile-sub">Lansia · 67 tahun</div>
+    </div>
+  </aside>
+
+  <!-- CHAT AREA -->
+  <div class="chat-area">
+    <div class="messages" id="messages">
+      <!-- Empty state shown initially -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">💜</div>
+        <div class="empty-title">Halo, ada yang bisa Kinly bantu?</div>
+        <div class="empty-sub">Tanyakan jadwal obat, cek interaksi obat, atau laporan gejala kesehatan kepada saya.</div>
+      </div>
+    </div>
+
+    <!-- Quick replies -->
+    <div class="quick-replies" id="quick-replies">
+      <button class="qr-btn" onclick="sendQuick('Obat pagi saya apa hari ini?')">💊 Obat pagi saya?</button>
+      <button class="qr-btn" onclick="sendQuick('Saya merasa pusing tadi')">🤒 Saya pusing</button>
+      <button class="qr-btn" onclick="sendQuick('Apakah obat saya boleh diminum bersamaan?')">⚠️ Cek interaksi obat</button>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      ⚕️ SilverCare hanya membantu koordinasi perawatan — bukan pengganti dokter. Selalu konsultasikan perubahan pengobatan dengan tenaga medis.
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <div class="input-wrap">
+        <textarea id="msg-input" rows="1" placeholder="Ketik pesan Anda..."
+          onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      </div>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── State ─────────────────────────────────────────────────────────────────
+  let mode = 'elder';
+  let isTyping = false;
+
+  const DEMO_RESPONSES = {
+    elder: [
+      {
+        trigger: ['obat', 'minum', 'jadwal', 'pagi', 'sore', 'malam'],
+        tool: 'check_medication_schedule',
+        response: `<div class="tool-indicator elder"><span class="spinner"></span> Memanggil <strong>check_medication_schedule</strong></div>
+
+Selamat pagi, Bu Siti! 🌸
+
+Sekarang pukul 08:00, saatnya minum obat pagi Anda:
+
+**1. Amlodipine 5mg** — 1 tablet
+   → Diminum setelah sarapan ya, Bu
+
+**2. Metformin 500mg** — 1 tablet
+   → Diminum bersama makanan untuk mengurangi mual
+
+Jangan lupa minum air putih yang banyak ya, Bu. Apakah ada yang ingin ditanyakan tentang obat-obat ini? 😊`
+      },
+      {
+        trigger: ['pusing', 'mual', 'gejala', 'sakit', 'nyeri', 'tidak enak'],
+        tool: 'report_health_symptom',
+        response: `<div class="tool-indicator elder"><span class="spinner"></span> Memanggil <strong>report_health_symptom</strong></div>
+
+Saya sudah mencatat gejala Anda, Bu Siti.
+
+<span class="urgency-badge urgency-2">🟡 Urgensi Level 2 — Pantau</span>
+
+**Kemungkinan penyebab:** Pusing ringan bisa menjadi efek samping Amlodipine pada awal penggunaan — ini cukup umum terjadi.
+
+**Yang harus dilakukan:**
+- Istirahat sejenak dan duduk dengan tenang
+- Jangan langsung berdiri tiba-tiba
+- Minum air putih yang cukup
+- Pantau selama 2 jam ke depan
+
+**Saya sudah kirim notifikasi ke Pak Budi (anak Anda)** agar beliau tahu kondisi Anda saat ini. 💜
+
+Jika pusing semakin parah atau disertai nyeri dada, segera hubungi **119** ya, Bu.`
+      },
+      {
+        trigger: ['interaksi', 'bersamaan', 'aman', 'kombinasi'],
+        tool: 'check_drug_interaction',
+        response: `<div class="tool-indicator elder"><span class="spinner"></span> Memanggil <strong>check_drug_interaction</strong></div>
+
+Saya cek dulu ya, Bu Siti... ✅
+
+**Amlodipine + Metformin:**
+<span class="urgency-badge urgency-1">✅ AMAN — Tidak ada interaksi berbahaya</span>
+
+Kedua obat ini aman diminum bersamaan. Amlodipine untuk tekanan darah dan Metformin untuk gula darah bekerja di jalur yang berbeda.
+
+**Tips:** Sebaiknya minum keduanya setelah makan ya, Bu, supaya lambung tidak terasa tidak nyaman. 😊
+
+Apakah ada obat lain yang ingin dicek?`
+      }
+    ],
+    caregiver: [
+      {
+        trigger: ['cuti', 'leave', 'hr', 'surat', 'caregiver', 'pengajuan'],
+        tool: 'generate_caregiver_leave_request',
+        response: `<div class="tool-indicator" style="background:#ebf4ff;border-color:#bee3f8;color:#2b6cb0"><span class="spinner"></span> Memanggil <strong>generate_caregiver_leave_request</strong></div>
+
+Draft surat Caregiver Leave sudah siap! 📋
+
+---
+
+**Kepada Yth.**
+[NAMA ATASAN]
+[NAMA PERUSAHAAN]
+
+Dengan hormat,
+
+Saya, **Budi Santoso**, karyawan Divisi Marketing, mengajukan permohonan **Caregiver Leave** selama **3 (tiga) hari kerja**, mulai tanggal [tanggal mulai] hingga [tanggal selesai].
+
+Pengajuan ini saya sampaikan karena **Ibu saya, Ibu Siti Rahayu (67 tahun)**, memerlukan pendampingan intensif berkaitan dengan kondisi kesehatan beliau yang membutuhkan monitoring rutin dan kunjungan ke fasilitas kesehatan.
+
+Selama masa cuti, saya akan memastikan pekerjaan saya telah didelegasikan kepada rekan yang berwenang.
+
+Atas perhatian dan persetujuan Bapak/Ibu, saya ucapkan terima kasih.
+
+Hormat saya,
+**Budi Santoso**
+
+---
+
+Silakan review dan edit sebelum dikirim ya. Ada yang ingin diubah?`
+      },
+      {
+        trigger: ['ibu', 'mama', 'ayah', 'orang tua', 'kondisi', 'monitor'],
+        tool: 'report_health_symptom',
+        response: `<div class="tool-indicator" style="background:#ebf4ff;border-color:#bee3f8;color:#2b6cb0"><span class="spinner"></span> Memanggil <strong>report_health_symptom</strong></div>
+
+**Laporan Kondisi Ibu Siti** (update terkini):
+
+<span class="urgency-badge urgency-2">🟡 Status: Perlu Pantauan</span>
+
+**Gejala dilaporkan:** Pusing ringan setelah minum Amlodipine pagi ini
+**Waktu laporan:** 08:34 hari ini
+**Level urgensi:** 2/5 — Tidak darurat, pantau 2 jam
+
+**Rekomendasi:**
+- Pastikan Ibu sudah makan sebelum minum obat tadi
+- Hubungi Ibu sekitar pukul 10:00 untuk follow-up
+- Jika kondisi memburuk, sarankan ke klinik hari ini
+
+Mau saya bantu jadwalkan pengingat untuk telepon Ibu? 📞`
+      },
+      {
+        trigger: ['obat', 'resep', 'jadwal'],
+        tool: 'check_medication_schedule',
+        response: `<div class="tool-indicator" style="background:#ebf4ff;border-color:#bee3f8;color:#2b6cb0"><span class="spinner"></span> Memanggil <strong>check_medication_schedule</strong></div>
+
+**Jadwal Obat Ibu Siti Rahayu — Hari Ini:**
+
+| Waktu | Obat | Dosis | Status |
+|---|---|---|---|
+| 08:00 | Amlodipine 5mg | 1 tablet | ✅ Sudah diminum |
+| 08:00 | Metformin 500mg | 1 tablet | ✅ Sudah diminum |
+| 13:00 | Metformin 500mg | 1 tablet | ⏳ Belum |
+| 20:00 | Amlodipine 5mg | 1 tablet | ⏳ Belum |
+
+Mau saya aktifkan pengingat untuk Ibu di pukul 13:00?`
+      }
+    ]
+  };
+
+  // ── Mode switching ────────────────────────────────────────────────────────
+  function setMode(m) {
+    mode = m;
+    const isElder = m === 'elder';
+
+    document.getElementById('btn-elder').className = 'mode-btn' + (isElder ? ' active-elder' : '');
+    document.getElementById('btn-caregiver').className = 'mode-btn' + (!isElder ? ' active-caregiver' : '');
+
+    const input = document.getElementById('msg-input');
+    const sendBtn = document.getElementById('send-btn');
+    const qrs = document.querySelectorAll('.qr-btn');
+    const tcs = document.querySelectorAll('.tool-card');
+
+    input.className = isElder ? '' : 'caregiver-mode';
+    sendBtn.className = 'send-btn' + (isElder ? '' : ' caregiver');
+    input.placeholder = isElder ? 'Tanyakan tentang obat Anda...' : 'Monitor orang tua atau buat dokumen HR...';
+
+    qrs.forEach(b => b.className = 'qr-btn' + (isElder ? '' : ' caregiver'));
+
+    document.getElementById('profile-name').textContent = isElder ? 'Bu Siti Rahayu' : 'Budi Santoso';
+    document.getElementById('profile-sub').textContent = isElder ? 'Lansia · 67 tahun' : 'Karyawan · Sandwich Generation';
+
+    // Update quick replies
+    const qrContainer = document.getElementById('quick-replies');
+    if (isElder) {
+      qrContainer.innerHTML = `
+        <button class="qr-btn" onclick="sendQuick('Obat pagi saya apa hari ini?')">💊 Obat pagi saya?</button>
+        <button class="qr-btn" onclick="sendQuick('Saya merasa pusing tadi')">🤒 Saya pusing</button>
+        <button class="qr-btn" onclick="sendQuick('Apakah obat saya boleh diminum bersamaan?')">⚠️ Cek interaksi obat</button>
+      `;
+    } else {
+      qrContainer.innerHTML = `
+        <button class="qr-btn caregiver" onclick="sendQuick('Bagaimana kondisi ibu saya hari ini?')">👴 Status Ibu</button>
+        <button class="qr-btn caregiver" onclick="sendQuick('Jadwal obat ibu saya hari ini')">💊 Jadwal obat Ibu</button>
+        <button class="qr-btn caregiver" onclick="sendQuick('Saya ingin mengajukan caregiver leave 3 hari untuk merawat ibu')">📋 Ajukan Cuti</button>
+      `;
+    }
+  }
+
+  // ── Messaging ─────────────────────────────────────────────────────────────
+  function sendQuick(text) {
+    document.getElementById('msg-input').value = text;
+    sendMessage();
+  }
+
+  function insertQuick(text) {
+    document.getElementById('msg-input').value = text;
+    document.getElementById('msg-input').focus();
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('msg-input');
+    const text = input.value.trim();
+    if (!text || isTyping) return;
+
+    hideEmpty();
+    appendMessage(text, 'user');
+    input.value = '';
+    input.style.height = 'auto';
+
+    showTyping();
+    const delay = 1200 + Math.random() * 800;
+    setTimeout(() => {
+      hideTyping();
+      const reply = getBotResponse(text);
+      appendMessage(reply, 'bot', true);
+    }, delay);
+  }
+
+  function getBotResponse(text) {
+    const lower = text.toLowerCase();
+    const responses = DEMO_RESPONSES[mode];
+    for (const r of responses) {
+      if (r.trigger.some(t => lower.includes(t))) return r.response;
+    }
+    return `Terima kasih sudah menghubungi SilverCare! 😊\n\nSaya siap membantu dengan:\n• 💊 Jadwal dan jadwal minum obat\n• ⚠️ Cek interaksi antar obat\n• 🩺 Laporan gejala kesehatan${mode === 'caregiver' ? '\n• 📋 Draft surat Caregiver Leave' : ''}\n\nSilakan pilih salah satu di atas, atau ketik pertanyaan Anda!`;
+  }
+
+  function appendMessage(text, role, isMarkdown = false) {
+    const container = document.getElementById('messages');
+    const isElder = mode === 'elder';
+    const isUser = role === 'user';
+
+    const row = document.createElement('div');
+    row.className = 'msg-row' + (isUser ? ' user' : '');
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar' + (isUser ? '' : (isElder ? ' bot-elder' : ' bot-caregiver'));
+    avatar.textContent = isUser ? (isElder ? '👴' : '👔') : '🤖';
+
+    const col = document.createElement('div');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble ' + (isUser ? ('user' + (!isElder ? ' caregiver' : '')) : 'bot');
+
+    if (isMarkdown && !isUser) {
+      bubble.innerHTML = simpleMarkdown(text);
+    } else {
+      bubble.textContent = text;
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'bubble-meta' + (isUser ? '' : ' bot-meta');
+    meta.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+    col.appendChild(bubble);
+    col.appendChild(meta);
+    row.appendChild(avatar);
+    row.appendChild(col);
+    container.appendChild(row);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function simpleMarkdown(text) {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`(.+?)`/g, '<code style="background:#f0f4f8;padding:1px 5px;border-radius:3px;font-size:12px">$1</code>')
+      .replace(/---/g, '<hr style="border:none;border-top:1px solid #e2e8f0;margin:8px 0">')
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>');
+  }
+
+  let typingEl = null;
+  function showTyping() {
+    isTyping = true;
+    document.getElementById('send-btn').disabled = true;
+    const container = document.getElementById('messages');
+    const isElder = mode === 'elder';
+
+    const row = document.createElement('div');
+    row.className = 'msg-row';
+    row.id = 'typing-row';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar' + (isElder ? ' bot-elder' : ' bot-caregiver');
+    avatar.textContent = '🤖';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble bot';
+    bubble.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    container.appendChild(row);
+    container.scrollTop = container.scrollHeight;
+    typingEl = row;
+  }
+
+  function hideTyping() {
+    isTyping = false;
+    document.getElementById('send-btn').disabled = false;
+    if (typingEl) { typingEl.remove(); typingEl = null; }
+  }
+
+  function hideEmpty() {
+    const e = document.getElementById('empty-state');
+    if (e) e.remove();
+  }
+
+  // Simulate MCP connected after 1.5s
+  setTimeout(() => {
+    document.getElementById('langflow-status').innerHTML =
+      '<span class="status-dot dot-green"></span>Langflow MCP';
+    document.getElementById('astradb-status').innerHTML =
+      '<span class="status-dot dot-green"></span>Astra DB';
+  }, 1500);
+</script>
+</body>
+</html>

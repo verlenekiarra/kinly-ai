@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "se-001",
+    "drug_name": "Amlodipine",
+    "side_effect_text": "Efek samping Amlodipine yang umum: pusing (dizziness) terutama saat berdiri tiba-tiba (hipotensi ortostatik), pembengkakan kaki/pergelangan kaki (edema perifer), wajah memerah (flushing), sakit kepala, kelelahan. Efek samping serius yang memerlukan perhatian segera: nyeri dada, detak jantung tidak teratur, pembengkakan parah pada tangan atau kaki.",
+    "common_effects": ["pusing", "kepala ringan", "bengkak kaki", "wajah merah", "sakit kepala", "lelah", "mual"],
+    "serious_effects": ["nyeri dada", "detak jantung tidak teratur", "bengkak parah", "sesak napas"],
+    "urgency_if_serious": 5
+  },
+  {
+    "_id": "se-002",
+    "drug_name": "Metformin",
+    "side_effect_text": "Efek samping Metformin yang umum: mual, muntah, diare, sakit perut, tidak nafsu makan — terutama di awal penggunaan dan berkurang seiring waktu. Efek samping serius (jarang): asidosis laktat — ditandai dengan kelemahan otot yang tidak biasa, sulit bernapas, nyeri perut parah, rasa dingin, pusing berat.",
+    "common_effects": ["mual", "muntah", "diare", "sakit perut", "tidak nafsu makan", "rasa logam di mulut"],
+    "serious_effects": ["kelemahan otot parah", "sulit bernapas", "nyeri perut hebat", "pusing berat", "detak jantung cepat"],
+    "urgency_if_serious": 5
+  },
+  {
+    "_id": "se-003",
+    "drug_name": "Simvastatin",
+    "side_effect_text": "Efek samping Simvastatin yang umum: nyeri otot ringan, sakit kepala, mual, konstipasi atau diare. Efek samping serius: miopati — nyeri otot parah, kelemahan, urin berwarna gelap seperti teh (rhabdomyolysis). Nyeri otot yang tidak biasa atau urin berwarna gelap harus segera dilaporkan ke dokter.",
+    "common_effects": ["nyeri otot ringan", "sakit kepala", "mual", "konstipasi", "diare"],
+    "serious_effects": ["nyeri otot parah", "kelemahan otot", "urin gelap seperti teh", "demam"],
+    "urgency_if_serious": 4
+  },
+  {
+    "_id": "se-004",
+    "drug_name": "Bisoprolol",
+    "side_effect_text": "Efek samping Bisoprolol yang umum: kelelahan, tangan dan kaki terasa dingin, pusing, sakit kepala, detak jantung lambat. Efek samping serius: bradikardia berat (detak jantung sangat lambat <50/menit), sesak napas, pembengkakan kaki. Jangan berhenti minum Bisoprolol secara tiba-tiba tanpa petunjuk dokter karena dapat menyebabkan rebound efek pada jantung.",
+    "common_effects": ["lelah", "tangan kaki dingin", "pusing", "sakit kepala", "detak jantung lambat", "gangguan tidur"],
+    "serious_effects": ["detak jantung sangat lambat", "sesak napas parah", "bengkak kaki parah", "nyeri dada"],
+    "urgency_if_serious": 5
+  },
+  {
+    "_id": "se-005",
+    "drug_name": "Aspirin",
+    "side_effect_text": "Efek samping Aspirin dosis rendah (80mg) yang umum: iritasi lambung, mual, sakit perut terutama jika diminum saat perut kosong. Efek samping serius: perdarahan lambung — tinja berwarna hitam atau berdarah, muntah darah; tinnitus (telinga berdenging) pada dosis tinggi. Hindari konsumsi saat perut kosong.",
+    "common_effects": ["iritasi lambung", "mual", "sakit perut", "heartburn"],
+    "serious_effects": ["tinja hitam", "muntah darah", "telinga berdenging", "perdarahan tidak berhenti"],
+    "urgency_if_serious": 5
+  },
+  {
+    "_id": "se-006",
+    "drug_name": "Meloxicam",
+    "side_effect_text": "Efek samping Meloxicam yang umum: sakit perut, mual, diare, pusing, sakit kepala. Efek samping serius: ulkus lambung dan perdarahan saluran cerna — tinja hitam, muntah darah; masalah ginjal — urin berkurang, bengkak; reaksi alergi kulit parah. Tidak boleh digunakan jangka panjang tanpa pengawasan dokter.",
+    "common_effects": ["sakit perut", "mual", "diare", "pusing", "sakit kepala", "kembung"],
+    "serious_effects": ["tinja hitam", "muntah darah", "urin berkurang drastis", "bengkak parah", "ruam kulit parah"],
+    "urgency_if_serious": 4
+  },
+  {
+    "_id": "se-007",
+    "drug_name": "Ramipril",
+    "side_effect_text": "Efek samping Ramipril yang umum: batuk kering persisten (sangat umum pada ACE inhibitor), pusing terutama saat berdiri, kelelahan, sakit kepala. Efek samping serius: angioedema — pembengkakan mendadak wajah, bibir, lidah, atau tenggorokan yang dapat mengancam pernapasan; hiperkalemia (kalium darah tinggi); gagal ginjal akut.",
+    "common_effects": ["batuk kering", "pusing", "kelelahan", "sakit kepala", "mual"],
+    "serious_effects": ["bengkak wajah atau tenggorokan mendadak", "sulit bernapas", "sulit menelan", "urin sangat berkurang"],
+    "urgency_if_serious": 5
+  }
+]

@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+secrets/
+credentials/
+*.key
+*.pem
+__pycache__/
+.DS_Store
+Thumbs.db
+README.md
+architecture.md
+langflow/README.md
+.gitignore

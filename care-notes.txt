@@ -1,0 +1,7 @@
+KINLY DEMO CARE NOTES
+This is fictional demonstration data, not a real patient record.
+
+1. The caregiver should check the appointment reminder each morning.
+2. The appointment time is not specified in these notes.
+3. No medication names, dosages, or schedules are provided.
+4. If information is missing, the caregiver should verify it with the responsible care provider.

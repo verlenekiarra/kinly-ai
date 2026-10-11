@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "di-001",
+    "drug_a": "Amlodipine",
+    "drug_b": "Metformin",
+    "status": "AMAN",
+    "interaction_text": "Kombinasi Amlodipine dan Metformin: AMAN. Amlodipine adalah calcium channel blocker untuk hipertensi. Metformin adalah antidiabetik oral. Keduanya bekerja di jalur farmakologi yang berbeda dan tidak memiliki interaksi klinis yang signifikan. Aman diminum bersamaan. Monitoring tekanan darah dan gula darah tetap dianjurkan secara rutin.",
+    "recommendation": "Aman diminum bersamaan. Tetap pantau tekanan darah dan kadar gula darah secara rutin."
+  },
+  {
+    "_id": "di-002",
+    "drug_a": "Aspirin",
+    "drug_b": "Ibuprofen",
+    "status": "PERINGATAN",
+    "interaction_text": "Kombinasi Aspirin dan Ibuprofen: PERINGATAN. Ibuprofen dapat mengurangi efek antiplatelet dari Aspirin dosis rendah jika diminum bersamaan. Risiko perdarahan saluran cerna meningkat. Jika keduanya diperlukan, Aspirin sebaiknya diminum setidaknya 2 jam sebelum Ibuprofen.",
+    "recommendation": "Hindari kombinasi ini jika memungkinkan. Konsultasikan dengan dokter atau apoteker untuk alternatif nyeri yang lebih aman."
+  },
+  {
+    "_id": "di-003",
+    "drug_a": "Simvastatin",
+    "drug_b": "Amlodipine",
+    "status": "PERINGATAN",
+    "interaction_text": "Kombinasi Simvastatin dan Amlodipine: PERINGATAN RINGAN. Amlodipine dapat meningkatkan kadar Simvastatin dalam darah hingga 77%. Dosis Simvastatin tidak boleh melebihi 20mg per hari jika dikombinasikan dengan Amlodipine. Risiko miopati (nyeri otot) meningkat pada dosis tinggi.",
+    "recommendation": "Pastikan dosis Simvastatin tidak lebih dari 20mg. Laporkan ke dokter jika ada nyeri otot yang tidak biasa."
+  },
+  {
+    "_id": "di-004",
+    "drug_a": "Warfarin",
+    "drug_b": "Aspirin",
+    "status": "BERBAHAYA",
+    "interaction_text": "Kombinasi Warfarin dan Aspirin: BERBAHAYA. Kombinasi ini sangat meningkatkan risiko perdarahan serius termasuk perdarahan otak dan perdarahan saluran cerna. Keduanya memiliki efek antikoagulan/antiplatelet yang bila dikombinasikan dapat menyebabkan perdarahan yang mengancam jiwa.",
+    "recommendation": "JANGAN diminum bersamaan tanpa pengawasan ketat dokter spesialis. Segera konsultasikan ke dokter jika sedang mengonsumsi keduanya."
+  },
+  {
+    "_id": "di-005",
+    "drug_a": "Metformin",
+    "drug_b": "Simvastatin",
+    "status": "AMAN",
+    "interaction_text": "Kombinasi Metformin dan Simvastatin: AMAN. Tidak ada interaksi klinis yang signifikan antara Metformin dan Simvastatin. Keduanya dapat dikombinasikan dengan aman pada pasien diabetes dengan dislipidemia. Monitoring fungsi ginjal dan hati secara berkala tetap dianjurkan.",
+    "recommendation": "Aman dikombinasikan. Lakukan pemeriksaan fungsi ginjal dan hati secara berkala sesuai anjuran dokter."
+  },
+  {
+    "_id": "di-006",
+    "drug_a": "Bisoprolol",
+    "drug_b": "Amlodipine",
+    "status": "PERINGATAN",
+    "interaction_text": "Kombinasi Bisoprolol dan Amlodipine: PERINGATAN. Keduanya menurunkan tekanan darah dan detak jantung. Kombinasi ini dapat menyebabkan hipotensi (tekanan darah terlalu rendah) atau bradikardia (detak jantung terlalu lambat) terutama pada lansia. Digunakan bersama hanya atas indikasi dokter dengan monitoring ketat.",
+    "recommendation": "Hanya gunakan kombinasi ini atas petunjuk dokter. Pantau tekanan darah dan detak jantung secara rutin. Segera hubungi dokter jika pusing berat atau detak jantung terasa lambat."
+  },
+  {
+    "_id": "di-007",
+    "drug_a": "Calcium",
+    "drug_b": "Alendronate",
+    "status": "PERINGATAN",
+    "interaction_text": "Kombinasi Calcium dan Alendronate: PERINGATAN JADWAL. Calcium dapat mengurangi penyerapan Alendronate secara signifikan jika diminum bersamaan. Alendronate harus diminum minimum 30 menit SEBELUM Calcium atau makanan apapun di pagi hari.",
+    "recommendation": "Minum Alendronate terlebih dahulu di pagi hari saat perut kosong dengan segelas air penuh. Tunggu minimal 30 menit sebelum minum Calcium atau sarapan."
+  }
+]
